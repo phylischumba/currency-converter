@@ -1,46 +1,51 @@
 import { Card, Button, Alert } from "react-bootstrap";
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import LoadingSpinner from "./LoadingState";
+import axios from "axios";
 
-export default function Results({ base, target }) {
-  const [data, setData] = useState();
+const Results = ({ base, target }) => {
+  let url = `${process.env.REACT_APP_SIMPLE_API}/price?ids=${base}&vs_currencies=${target}`;
+  const [amount, setAmount] = useState(1);
+  const handleChange = (e) => {
+    setAmount(e.target.value);
+  };
+  const [converted, setConverted] = useState();
+  const [errMsg, setErrMsg] = useState(false);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  console.log(process.env.REACT_APP_SIMPLE_API);
-  let url = `${process.env.REACT_APP_SIMPLE_API}/price?ids=${base}&vs_currencies=${target}`;
-  const [amount, setAmount] = useState(0);
-  const handleChange = (e) => {
-    setAmount(e.target.valu);
-  };
-  const [errMsg, setErrMsg] = useState(false);
+  const [labelT, setLabel] = useState('')
+
+  useEffect(() => {
+    if (base && target) {
+      axios
+        .get(url, setIsLoading(true))
+        .then((response) => {
+          setIsLoading(false);
+          setData(response.data);
+        })
+        .catch((error) => {
+          setIsLoading(false);
+
+          setError(error);
+        });
+    }
+  }, [base, target, url]);
 
   const handleClick = () => {
-    if (base === "") {
+    if (base === "" || target === "") {
       setErrMsg(true);
       return;
-    } else if (target === "") {
-      setErrMsg(true);
     } else {
       setErrMsg(false);
     }
-    const fetchData = () => {
-      axios
-        .get(url, { amount: amount }, setIsLoading(true))
-        .then((response) => {
-          if (response.status === 200) {
-            setIsLoading(false);
-            setData(response?.data);
-          }
-        })
-        .catch((error) => {
-          setError(error);
-        });
-    };
-    if (base !== "" && target !== "") {
-      fetchData();
+    if (data !== undefined) {
+      setLabel(Object.keys(data[base])[0]);
+
+      return setConverted(data[base][target] * amount);
     }
   };
+
 
   return (
     <>
@@ -52,7 +57,12 @@ export default function Results({ base, target }) {
         </Card.Header>
         <Card.Body className="d-flex flex-column">
           <label className="text-align-start">Amount</label>
-          <input onChange={handleChange} className="p-2" type="number" />
+          <input
+            onChange={handleChange}
+            className="p-2"
+            defaultValue={amount}
+            type="number"
+          />
           <Button
             className="color-white mx-auto my-3"
             variant="dark"
@@ -60,13 +70,11 @@ export default function Results({ base, target }) {
           >
             Convert
           </Button>
-          {data ? (
+          {converted !== undefined ? (
             <h4 className="font-weight-bold">
-              {data[base][target]} {data && target}
+              {converted}{' '}{labelT}
             </h4>
-          ) : (
-            <></>
-          )}
+          ) : null}
         </Card.Body>
       </Card>
       {errMsg ? (
@@ -82,4 +90,6 @@ export default function Results({ base, target }) {
       )}
     </>
   );
-}
+};
+
+export default Results;

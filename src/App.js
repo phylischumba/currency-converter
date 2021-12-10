@@ -1,10 +1,10 @@
-import Currency from "./Currency";
+import Currency from "./components/Currency";
 import { Container, Col, Row } from "react-bootstrap";
 import "./App.css";
-import Results from "./Results";
+import Results from "./components/Results";
 import React, { useState } from "react";
 
-function App() {
+const App = () => {
   const [selectedBase, setSelectedBase] = useState("");
   const [selectedTarget, setSelectedTarget] = useState("");
 
@@ -41,6 +41,6 @@ function App() {
       </Row>
     </Container>
   );
-}
+};
 
 export default App;

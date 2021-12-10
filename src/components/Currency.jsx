@@ -1,9 +1,9 @@
 import { Card, Col, Form, Alert } from "react-bootstrap";
 import React from "react";
-import useApiRequest from "./api";
+import useApiRequest from "../api/api";
 import LoadingSpinner from "./LoadingState";
 
-export default function Currency({ currencyName, base, onSelect }) {
+const  Currency = ({ currencyName, base, onSelect }) => {
   let url = base
     ? `${process.env.REACT_APP_COINS_API}/list?include_platform=false`
     : `${process.env.REACT_APP_SIMPLE_API}/supported_vs_currencies`;
@@ -39,3 +39,5 @@ export default function Currency({ currencyName, base, onSelect }) {
     </>
   );
 }
+
+export default Currency;
