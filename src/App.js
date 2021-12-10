@@ -1,5 +1,4 @@
 import Currency from "./Currency";
-// import TargetCurrency from "./TargetCurrency";
 import { Container, Col, Row } from "react-bootstrap";
 import "./App.css";
 import Results from "./Results";
@@ -15,7 +14,6 @@ function App() {
   const handleSelectTarget = (e) => {
     setSelectedTarget(e.target.value);
   };
-  console.log(selectedBase, selectedTarget);
   return (
     <Container className="App mt-5">
       <Row className="my-5">
@@ -24,14 +22,14 @@ function App() {
       <Row className="my-5">
         <Col md={6}>
           <Currency
-            currencyName="Base currency"
+            currencyName="Base Currency"
             onSelect={handleSelectBase}
             base
           ></Currency>
         </Col>
         <Col md={6}>
           <Currency
-            currencyName="Target currency"
+            currencyName="Target Currency"
             onSelect={handleSelectTarget}
           ></Currency>
         </Col>

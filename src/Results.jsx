@@ -7,7 +7,8 @@ export default function Results({ base, target }) {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  let url = `https://api.coingecko.com/api/v3/simple/price?ids=${base}&vs_currencies=${target}`;
+  console.log(process.env.REACT_APP_SIMPLE_API);
+  let url = `${process.env.REACT_APP_SIMPLE_API}/price?ids=${base}&vs_currencies=${target}`;
   const [amount, setAmount] = useState(0);
   const handleChange = (e) => {
     setAmount(e.target.valu);
@@ -18,10 +19,10 @@ export default function Results({ base, target }) {
     if (base === "") {
       setErrMsg(true);
       return;
-    } else if(target === ""){
+    } else if (target === "") {
       setErrMsg(true);
-    }else{
-      setErrMsg(false)
+    } else {
+      setErrMsg(false);
     }
     const fetchData = () => {
       axios
@@ -36,26 +37,24 @@ export default function Results({ base, target }) {
           setError(error);
         });
     };
-    fetchData();
+    if (base !== "" && target !== "") {
+      fetchData();
+    }
   };
-  console.log(errMsg);
-
-  if (error) {
-    <Alert variant="danger">{error}</Alert>;
-  }
 
   return (
     <>
       {isLoading ? <LoadingSpinner /> : <></>}
+      {error ? <Alert variant="danger">{error?.message}</Alert> : <></>}
       <Card>
         <Card.Header>
           <h3>Amount and results</h3>
         </Card.Header>
         <Card.Body className="d-flex flex-column">
-          <label>Amount</label>
-          <input onChange={handleChange} type="number" />
+          <label className="text-align-start">Amount</label>
+          <input onChange={handleChange} className="p-2" type="number" />
           <Button
-            className="w-50 color-white mx-auto my-3"
+            className="color-white mx-auto my-3"
             variant="dark"
             onClick={handleClick}
           >
@@ -63,15 +62,24 @@ export default function Results({ base, target }) {
           </Button>
           {data ? (
             <h4 className="font-weight-bold">
-              {data[base][target]} {target}
+              {data[base][target]} {data && target}
             </h4>
           ) : (
             <></>
           )}
         </Card.Body>
       </Card>
-            {errMsg ? <Alert variant="danger">Base and target are require</Alert> : <></>}
-
+      {errMsg ? (
+        <Alert
+          variant="danger"
+          className="position-absolute bottom-0 start-50 translate-middle"
+        >
+          Please ensure you select base and target currencies in order to
+          convert
+        </Alert>
+      ) : (
+        <></>
+      )}
     </>
   );
 }
