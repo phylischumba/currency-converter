@@ -8,14 +8,18 @@ const App = () => {
   const [selectedBase, setSelectedBase] = useState("");
   const [selectedTarget, setSelectedTarget] = useState("");
 
+  // set state for base currency
   const handleSelectBase = (e) => {
     setSelectedBase(e.target.value);
   };
+
+  // set state for target currency
   const handleSelectTarget = (e) => {
     setSelectedTarget(e.target.value);
   };
+
   return (
-    <Container className="App mt-5">
+    <Container className="App">
       <Row className="my-5">
         <h1 className="my-5">Curreny Converter</h1>
       </Row>

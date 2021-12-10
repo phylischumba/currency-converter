@@ -4,16 +4,22 @@ import useApiRequest from "../api/api";
 import LoadingSpinner from "./LoadingState";
 
 const  Currency = ({ currencyName, base, onSelect }) => {
+// set up url for the two select components
   let url = base
     ? `${process.env.REACT_APP_COINS_API}/list?include_platform=false`
     : `${process.env.REACT_APP_SIMPLE_API}/supported_vs_currencies`;
+
+  // fetching data
   const { data, isLoading, error } = useApiRequest(url);
+
+  // if an error exist when fetching data
   if (error) {
-    <Alert variant="danger">{error}</Alert>;
+    return <Alert variant="danger">{error}</Alert>;
   }
 
   return (
     <>
+    {/* whenever an api call is loading, display a loading spinner */}
       {isLoading ? <LoadingSpinner /> : <></>}
       <Card>
         <Card.Header>
