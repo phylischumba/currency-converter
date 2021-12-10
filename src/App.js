@@ -20,8 +20,8 @@ const App = () => {
 
   return (
     <Container className="App">
-      <Row className="my-5">
-        <h1 className="my-5">Curreny Converter</h1>
+      <Row className="mt-5">
+        <h1 className="mt-5">Curreny Converter</h1>
       </Row>
       <Row className="my-5">
         <Col md={6}>
@@ -38,7 +38,7 @@ const App = () => {
           ></Currency>
         </Col>
       </Row>
-      <Row>
+      <Row className="mt-2">
         <Col lg={6} className="m-auto">
           <Results base={selectedBase} target={selectedTarget} />
         </Col>
